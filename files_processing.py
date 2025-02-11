@@ -14,23 +14,24 @@ def get_data(response):
     table = soup.select_one('table[class=tbl]')
     rows = table.find_all('tr')
 
-    data = dict()
+    data = list()
     for row in rows[1:]:
         cells = row.find_all('td')
-
-        data['time'] = cells[1].select_one('font[class=smalldesc7]').text[-5:]
-        data['name'] = cells[2].text.strip()
-        data['href'] = cells[2].find('a').get('href')
+        file_inf = dict()
+        file_inf['time'] = cells[1].select_one('font[class=smalldesc7]').text[-5:]
+        file_inf['name'] = cells[2].text.strip()
+        file_inf['href'] = cells[2].find('a').get('href')
         # Болда может не быть
         try:
-            data['desc_bold'] = cells[3].find('b').text.strip()
+            file_inf['desc_bold'] = cells[3].find('b').text.strip()
         except AttributeError:
-            data['desc_bold'] = ''
+            file_inf['desc_bold'] = ''
         # Если нет болда, то нет и br и там просто текст
         try:
-            data['desc_regular'] = cells[3].find('br').next_sibling.strip()
+            file_inf['desc_regular'] = cells[3].find('br').next_sibling.strip()
         except AttributeError:
-            data['desc_regular'] = cells[3].text.strip()
+            file_inf['desc_regular'] = cells[3].text.strip()
+        data.append(file_inf)
     return data
 
 if __name__ == '__main__':
