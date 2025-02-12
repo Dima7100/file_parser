@@ -98,7 +98,7 @@ def get_response():
     try:
         response_mcko = session.get('https://okmcko.mos.ru/index2020.php?c=mid&d=downld')
         logger_mcko.info('Доступ к файлам получен')
-        return response_mcko
+        return response_mcko, session
     except requests.exceptions.RequestException as e:
         logger_mcko.error(f'Ошибка перехода на страницу файлов сайта МЦКО: {e}')
 
