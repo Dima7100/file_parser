@@ -27,7 +27,9 @@ def load_data():
     """
     Загружаем из data.json
     """
-    return json.load('data.json')
+    with open('data.json', 'r', encoding='utf-8') as file:
+        data = json.load(file)
+    return data
 
 
 def is_file_in_old_data(file_name, old_data):
