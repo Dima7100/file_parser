@@ -18,6 +18,9 @@ driver.implicitly_wait(10)
 
 
 def get_token():
+    """
+    Получаем bearer token через авторизацию на mos.ru, используя selenium из-за js кода на страницу
+    """
     driver.get(
         'https://login.mos.ru/sps/login/methods/password?bo=%2Fsps%2Foauth%2Fae%3Fresponse_type%3Dcode%26access_type%3Doffline%26client_id%3Ddnevnik.mos.ru%26scope%3Dopenid%2Bprofile%2Bbirthday%2Bcontacts%2Bsnils%2Bblitz_user_rights%2Bblitz_change_password%26redirect_uri%3Dhttps%3A%2F%2Fschool.mos.ru%2Fv3%2Fauth%2Fsudir%2Fcallback')
     WebDriverWait(driver, 10).until(

@@ -77,6 +77,9 @@ def get_mcko_auth(session, mcko_token):
 
 
 def get_response():
+    """
+    Входим на сайт okmcko.ru с токеном mcko и получаем страничку с таблицей файлов
+    """
     session = requests.Session() # Стартуем главную сессию
     bearer_token = os.getenv('TOKEN')
 
