@@ -9,7 +9,8 @@ def get_data(response):
     Получаем код страницы и парсим время загрузки файла, имя, ссылку и описание из болда и регулар частей
     """
 
-    soup = BeautifulSoup(response, 'lxml')
+
+    soup = BeautifulSoup(response.content, 'lxml', from_encoding="windows-1251")
 
     table = soup.select_one('table[class=tbl]')
     rows = table.find_all('tr')
@@ -25,16 +26,14 @@ def get_data(response):
         try:
             file_inf['desc_bold'] = cells[3].find('b').text.strip()
         except AttributeError:
-            logger_processing.warning('У записи нет bold текста')
             file_inf['desc_bold'] = ''
         # Если нет болда, то нет и br и там просто текст
         try:
             file_inf['desc_regular'] = cells[3].find('br').next_sibling.strip()
         except AttributeError:
-            logger_processing.warning('У записи нет bold текста, но есть regular текст')
             file_inf['desc_regular'] = cells[3].text.strip()
         data.append(file_inf)
-        logger_processing.info('Данные спарсены и сохранены в переменной data')
+    logger_processing.info('Данные спарсены и сохранены в переменной data')
     return data
 
 if __name__ == '__main__':
