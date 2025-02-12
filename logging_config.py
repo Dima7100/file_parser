@@ -2,15 +2,15 @@ import logging
 from logging import Logger
 from logging.handlers import RotatingFileHandler
 
-def setup_logger():
+def setup_logger(name):
     """
     Настройка логирования
     """
 
-    logger = logging.getLogger('okmcko')
+    logger = logging.getLogger(name)
     logger.setLevel(logging.INFO)
 
-    formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
     file_handler = RotatingFileHandler(
         filename="mcko.log",
@@ -28,5 +28,7 @@ def setup_logger():
 
     return logger
 
-logger = setup_logger()
-
+logger_mcko = setup_logger('mcko')
+logger_mos = setup_logger('mos')
+logger_storage = setup_logger('file_storage')
+logger_processing = setup_logger('file_process')

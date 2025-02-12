@@ -4,6 +4,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+from logging_config import logger_mos
+
 chrome_options = Options()
 chrome_options.add_argument("--headless=new")
 chrome_options.add_argument("--disable-blink-features=AutomationControlled")  # Отключаем автоматизацию
@@ -22,15 +24,21 @@ def get_token():
         EC.visibility_of_element_located((By.ID, "login"))
     )
 
+    logger_mos.info('login.mos.ru открыт')
+
     driver.find_element(By.ID, 'login').send_keys('pronindv')
     driver.find_element(By.ID, 'password').send_keys('Cuibai1!')
     driver.find_element(By.ID, 'bind').click()
 
+    logger_mos.info('Выполняем вход')
     title = False
-
+    #TODO изменить на ожидание получения куки.
     while not title:
         if driver.title == 'Московская электронная школа':
             title = True
 
     token = driver.get_cookie('aupd_token').get('value')
+    logger_mos.info('Bearer token получен!')
+
+    driver.quit()
     return token

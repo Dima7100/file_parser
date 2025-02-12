@@ -1,19 +1,19 @@
-from bs4 import BeautifulSoup
 import lxml
+from bs4 import BeautifulSoup
+
+from logging_config import logger_processing
 
 
 def get_data(response):
     """
     Получаем код страницы и парсим время загрузки файла, имя, ссылку и описание из болда и регулар частей
     """
-# with open('okmcko.html', 'r', encoding='windows-1251') as file:
-#     html_content = file.read()
 
     soup = BeautifulSoup(response, 'lxml')
 
     table = soup.select_one('table[class=tbl]')
     rows = table.find_all('tr')
-
+    logger_processing.info('Находим таблицу с файлами')
     data = list()
     for row in rows[1:]:
         cells = row.find_all('td')
@@ -25,13 +25,16 @@ def get_data(response):
         try:
             file_inf['desc_bold'] = cells[3].find('b').text.strip()
         except AttributeError:
+            logger_processing.warning('У записи нет bold текста')
             file_inf['desc_bold'] = ''
         # Если нет болда, то нет и br и там просто текст
         try:
             file_inf['desc_regular'] = cells[3].find('br').next_sibling.strip()
         except AttributeError:
+            logger_processing.warning('У записи нет bold текста, но есть regular текст')
             file_inf['desc_regular'] = cells[3].text.strip()
         data.append(file_inf)
+        logger_processing.info('Данные спарсены и сохранены в переменной data')
     return data
 
 if __name__ == '__main__':

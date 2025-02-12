@@ -6,7 +6,7 @@ import requests
 import urllib3
 from dotenv import load_dotenv, set_key
 
-from logging_config import logger
+from logging_config import logger_mcko
 from mos_token import get_token
 
 
@@ -34,20 +34,20 @@ def is_token_expired(token):
     Декодируем токен и проверяем срок годности. Возвращаем False или True
     """
     if not token:
-        logger.warning('Токен не передан в аргумент')
+        logger_mcko.warning('Токен не передан в аргумент')
     try:
         decoded = jwt.decode(token, options={'verify_signature': False})
         exp_timestamp = decoded.get('exp')
         if exp_timestamp:
             exp_date = datetime.fromtimestamp(exp_timestamp)
             if exp_date > datetime.now():
-                logger.info(f'Токен действителен до {exp_date}')
+                logger_mcko.info(f'Токен действителен до {exp_date}')
                 return False
             else:
-                logger.warning('Токен истек!')
+                logger_mcko.warning('Токен истек!')
                 return True
     except jwt.InvalidTokenError:
-        logger.error('Неверный токен!')
+        logger_mcko.error('Неверный токен!')
         return True
 
 
@@ -61,7 +61,7 @@ def get_mcko_token(session):
         mcko_token = response_mosru.json()['token']
         return mcko_token
     except requests.exceptions.RequestException as e:
-        logger.error(f'Ошибка при получении токена МЦКО: {e}')
+        logger_mcko.error(f'Ошибка при получении токена МЦКО: {e}')
 
 
 def get_mcko_auth(session, mcko_token):
@@ -72,7 +72,7 @@ def get_mcko_auth(session, mcko_token):
         response_mcko_auth = session.get(f'https://okmcko.mos.ru/jump_alt.php?sess_token={mcko_token}')
         response_mcko_auth.raise_for_status()
     except requests.exceptions.RequestException as e:
-        logger.error(f'Ошибка при первой аутентификации на сайте МЦКО: {e}')
+        logger_mcko.error(f'Ошибка при первой аутентификации на сайте МЦКО: {e}')
 
 
 
@@ -83,21 +83,21 @@ def get_response():
     if is_token_expired(bearer_token): # Если True, то получаем новый токен и заносим в env
         bearer_token = get_token()
         set_key('.env', 'TOKEN', bearer_token)
-        logger.info('Новый токен получен и сохранен')
+        logger_mcko.info('Новый токен получен и сохранен')
 
     HEADERS['Authorization'] = f'Bearer {bearer_token}' # Добавляем токен в заголовок
     session.headers.update(HEADERS) # Обновляем заголовки
 
     mcko_token = get_mcko_token(session)
-    logger.info('Токен МЦКО получен')
+    logger_mcko.info('Токен МЦКО получен')
     get_mcko_auth(session, mcko_token)
-    logger.info('Авторизация на МЦКО успешна')
+    logger_mcko.info('Авторизация на МЦКО успешна')
     try:
         response_mcko = session.get('https://okmcko.mos.ru/index2020.php?c=mid&d=downld')
-        logger.info('Доступ к файлам получен')
+        logger_mcko.info('Доступ к файлам получен')
         return response_mcko
     except requests.exceptions.RequestException as e:
-        logger.error(f'Ошибка перехода на страницу файлов сайта МЦКО: {e}')
+        logger_mcko.error(f'Ошибка перехода на страницу файлов сайта МЦКО: {e}')
 
 
 if __name__ == '__main__':
