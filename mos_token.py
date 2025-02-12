@@ -31,14 +31,9 @@ def get_token():
     driver.find_element(By.ID, 'bind').click()
 
     logger_mos.info('Выполняем вход')
-    title = False
-    #TODO изменить на ожидание получения куки.
-    while not title:
-        if driver.title == 'Московская электронная школа':
-            title = True
 
-    token = driver.get_cookie('aupd_token').get('value')
+    token = WebDriverWait(driver, 20).until(lambda x: x.get_cookie('aupd_token'))
     logger_mos.info('Bearer token получен!')
 
     driver.quit()
-    return token
+    return token['value']
