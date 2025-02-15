@@ -30,16 +30,21 @@ def download_files(session: requests.Session, new_data: list):
         logger_downloader.info('Создали папку')
 
         logger_downloader.info('Приступаем к закачке новых файлов')
+    #TODO лучше проверку выполнить в main, чем передавать функции. Лишние действия только
     if new_data:
         for file_info in new_data:
-            name = file_info['name']
-            href = file_info['href']
-            response = session.get(f'https://okmcko.mos.ru{href}')
-            response.raise_for_status()
+            try:
+                name = file_info['name']
+                href = file_info['href']
+                response = session.get(f'https://okmcko.mos.ru{href}')
+                response.raise_for_status()
 
-            file_path = DOWNLOADS / name
-            with open(file_path, 'wb') as file:
-                file.write(response.content)
+                file_path = DOWNLOADS / name
+                with open(file_path, 'wb') as file:
+                    file.write(response.content)
+                    logger_downloader.info(f'Файл {name} сохранен в папку')
+            except (requests.exceptions.RequestException, IOError) as e:
+                logger_downloader.error(f'Сайт не ответил или файл не скачался {e}')
         logger_downloader.info('Файлы скачены!')
     else:
         logger_downloader.info('Файлов для скачивания нет')
