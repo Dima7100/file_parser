@@ -19,7 +19,7 @@ def save_data(data):
     Сохраняем в json
     """
     with open('data.json', 'w', encoding='utf-8') as file:
-        json.dump(data, file, ensure_ascii=False)
+        json.dump(data, file, ensure_ascii=False, indent=5)
         logger_storage.info('Новые данные сохранены в data.json')
 
 
@@ -60,6 +60,6 @@ def filter_new_files(data):
         if not is_file_in_old_data(file_info['name'], old_data):
             logger_storage.info(f'Найден новый файл {file_info['name']}')
             new_data.append(file_info)
-    old_data.append(new_data)
+    old_data.extend(new_data)
     save_data(old_data)
     return new_data
