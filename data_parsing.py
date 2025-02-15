@@ -2,7 +2,7 @@ import lxml
 from bs4 import BeautifulSoup
 
 from logging_config import logger_processing
-
+#TODO названаие путает, переименовать в типа data_parsing
 
 def get_data(response):
     """
@@ -12,16 +12,19 @@ def get_data(response):
 
     soup = BeautifulSoup(response.content, 'lxml', from_encoding="windows-1251")
 
-    table = soup.select_one('table[class=tbl]')
-    rows = table.find_all('tr')
-    logger_processing.info('Находим таблицу с файлами')
-    data = list()
-    for row in rows[1:]:
-        cells = row.find_all('td')
-        file_inf = dict()
-        file_inf['time'] = cells[1].select_one('font[class=smalldesc7]').text[-5:]
-        file_inf['name'] = cells[2].text.strip()
-        file_inf['href'] = cells[2].find('a').get('href')
+    try:
+        table = soup.select_one('table[class=tbl]')
+        rows = table.find_all('tr')
+        logger_processing.info('Находим таблицу с файлами')
+        data = list()
+        for row in rows[1:]:
+            cells = row.find_all('td')
+            file_inf = dict()
+            file_inf['time'] = cells[1].select_one('font[class=smalldesc7]').text[-5:]
+            file_inf['name'] = cells[2].text.strip()
+            file_inf['href'] = cells[2].find('a').get('href')
+    except AttributeError as e:
+        logger_processing.error(f'Не найдена таблица или её часть {e}')
         # Болда может не быть
         try:
             file_inf['desc_bold'] = cells[3].find('b').text.strip()
