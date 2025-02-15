@@ -6,7 +6,7 @@ from logging_config import logger_storage
 
 def is_file_exists():
     """
-    Проверяем наличие файла
+    Проверяем наличие файла с метаданными о файлах
     """
     if os.path.exists('data.json'):
         return True
@@ -20,7 +20,7 @@ def save_data(data):
     """
     with open('data.json', 'w', encoding='utf-8') as file:
         json.dump(data, file, ensure_ascii=False)
-        logger_storage.info('Данные сохранены в data.json')
+        logger_storage.info('Новые данные сохранены в data.json')
 
 
 def load_data():
@@ -55,12 +55,11 @@ def filter_new_files(data):
         return data
 
     old_data = load_data()
-    logger_storage.info('data.json загружен')
+    logger_storage.info('Файл data.json загружен')
     for file_info in data:
         if not is_file_in_old_data(file_info['name'], old_data):
+            logger_storage.info(f'Найден новый файл {file_info['name']}')
             new_data.append(file_info)
     old_data.append(new_data)
     save_data(old_data)
-    logger_storage.info('Новые данные получены')
-    #TODO обработать момент, если новых данных нет!
     return new_data
