@@ -7,7 +7,7 @@ import urllib3
 from dotenv import load_dotenv, set_key
 
 from logging_config import logger_mcko
-from mos_token import get_token
+from get_mos_token import get_token
 
 
 # Заголовки
@@ -31,7 +31,7 @@ load_dotenv()
 
 def is_token_expired(token):
     """
-    Декодируем токен и проверяем срок годности. Возвращаем False или True
+    Декодируем bearer токен и проверяем срок годности. Возвращаем False или True
     """
     if not token:
         logger_mcko.warning('Токен не передан в аргумент')
@@ -41,7 +41,7 @@ def is_token_expired(token):
         if exp_timestamp:
             exp_date = datetime.fromtimestamp(exp_timestamp)
             if exp_date > datetime.now():
-                logger_mcko.info(f'Токен действителен до {exp_date}')
+                logger_mcko.info(f'Bearer token действителен до {exp_date}')
                 return False
             else:
                 logger_mcko.warning('Токен истек!')
@@ -59,6 +59,7 @@ def get_mcko_token(session):
         response_mosru = session.post('https://school.mos.ru/api/ej/acl/v1/mcko/token', json=PAYLOAD)
         response_mosru.raise_for_status()
         mcko_token = response_mosru.json()['token']
+        logger_mcko.info('Токен МЦКО получен')
         return mcko_token
     except requests.exceptions.RequestException as e:
         logger_mcko.error(f'Ошибка при получении токена МЦКО: {e}')
@@ -92,7 +93,6 @@ def get_response():
     session.headers.update(HEADERS) # Обновляем заголовки
 
     mcko_token = get_mcko_token(session)
-    logger_mcko.info('Токен МЦКО получен')
     get_mcko_auth(session, mcko_token)
     logger_mcko.info('Авторизация на МЦКО успешна')
     try:
