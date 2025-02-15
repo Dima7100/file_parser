@@ -22,7 +22,10 @@ if __name__ == '__main__':
     if new_data:
         download_files(session, new_data)
     else:
-        return None
+        print('Новых данных нет')
+        pass
+        #return None
+
     
     
     
