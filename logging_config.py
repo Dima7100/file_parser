@@ -12,6 +12,8 @@ def setup_logger(name):
 
     formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
+    # Создать директория логирования.filaname rename to main.log
+    # Создание папок можно вывести в __init__
     file_handler = RotatingFileHandler(
         filename="mcko.log",
         maxBytes= 10 * 1024 * 1024,
