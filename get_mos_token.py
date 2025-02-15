@@ -15,7 +15,7 @@ chrome_options.add_experimental_option("useAutomationExtension", False)
 driver = webdriver.Chrome(options=chrome_options)
 driver.implicitly_wait(10)
 
-
+#TODO переименовать в get_mos_token
 
 def get_token():
     """
