@@ -56,6 +56,7 @@ def filter_new_files(data):
 
     old_data = load_data()
     logger_storage.info('Файл data.json загружен')
+    # Проходимся по спарсеным данным и загруженным данным и сравниваем имя, при отсутствии, добавляем в новый список
     for file_info in data:
         if not is_file_in_old_data(file_info['name'], old_data):
             logger_storage.info(f'Найден новый файл {file_info['name']}')

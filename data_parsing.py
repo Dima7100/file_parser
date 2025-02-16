@@ -2,16 +2,13 @@ import lxml
 from bs4 import BeautifulSoup
 
 from logging_config import logger_processing
-#TODO названаие путает, переименовать в типа data_parsing
+
 
 def get_data(response):
     """
     Получаем код страницы и парсим время загрузки файла, имя, ссылку и описание из болда и регулар частей
     """
-
-
     soup = BeautifulSoup(response.content, 'lxml', from_encoding="windows-1251")
-
 
     table = soup.select_one('table[class=tbl]')
     rows = table.find_all('tr')
@@ -35,7 +32,7 @@ def get_data(response):
         except AttributeError:
             file_inf['desc_regular'] = cells[3].text.strip()
         data.append(file_inf)
-    logger_processing.info('Данные спарсены и сохранены в переменной data')
+    logger_processing.info('Данные спарсены и сохранены словарем в переменной data')
     return data
 
 
