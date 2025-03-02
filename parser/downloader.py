@@ -1,8 +1,6 @@
 import requests
-import os
-from requests import Session
 from pathlib import Path
-from logging_config import logger_downloader
+from configs.logging_config import logger_downloader
 
 CURRENT_PATH = Path.cwd()
 DOWNLOADS = CURRENT_PATH / 'downloads'
@@ -11,14 +9,11 @@ def is_exists_directory():
     """
     Проверяем есть ли папка для закачки
     """
-    logger_downloader.info('Проверяем наличие папки для закачек')
     if DOWNLOADS.exists():
-        logger_downloader.info('Папка существует')
         return True
     else:
-        logger_downloader.info('Папки нет')
+        logger_downloader.info('Папки для закачек нет')
         return False
-
 
 
 def download_files(session: requests.Session, new_data: list):
@@ -28,8 +23,6 @@ def download_files(session: requests.Session, new_data: list):
     if not is_exists_directory():
         Path.mkdir(DOWNLOADS)
         logger_downloader.info('Создали папку')
-
-        logger_downloader.info('Приступаем к закачке новых файлов')
 
     for file_info in new_data:
         try:
@@ -44,7 +37,10 @@ def download_files(session: requests.Session, new_data: list):
                 logger_downloader.info(f'Файл {name} сохранен в папку')
         except (requests.exceptions.RequestException, IOError) as e:
             logger_downloader.error(f'Сайт не ответил или файл не скачался {e}')
-     logger_downloader.info('Файлы скачены!')
+            #TODO - уведомить админа, удалить new_data из json
+            return False
+    logger_downloader.info('Файлы скачены!')
+    return True
 
 
 
