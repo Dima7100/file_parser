@@ -1,4 +1,4 @@
 .env
 okmcko.html
-data
-
+data/
+.idea/
