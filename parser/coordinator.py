@@ -1,11 +1,8 @@
 import os
 
-from get_mos_token import get_token
-from configs.logging_config import logger_mcko
-from okmcko import get_response, is_token_expired, update_headers, start_session, get_mcko_token, get_mcko_auth
-from data_parsing import get_data
-from parser.data_filter import filter_new_files
-from downloader import download_files
+from parser import (get_token, get_mcko_token, get_mcko_auth, get_response, get_data, update_headers,
+                    start_session, download_files, filter_new_files, is_token_expired)
+from configs import logger_mcko
 from dotenv import load_dotenv, set_key
 
 load_dotenv()

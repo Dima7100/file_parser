@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-from configs.logging_config import logger_processing
+from configs import logger_processing
 
 
 def get_data(response):

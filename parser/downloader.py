@@ -1,6 +1,6 @@
 import requests
 from pathlib import Path
-from configs.logging_config import logger_downloader
+from configs import logger_downloader
 
 CURRENT_PATH = Path.cwd()
 DOWNLOADS = CURRENT_PATH / 'downloads'

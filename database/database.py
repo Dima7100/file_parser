@@ -17,7 +17,7 @@ async def init_db():
 async def add_user(user_id: str, first_name: str, last_name: str, username: str):
     async with aiosqlite.connect("../data/users.db") as db:
         await db.execute("""
-            INSERT INTO users (user_id, first_name, last_name, username)
+            INSERT OR IGNORE INTO users (user_id, first_name, last_name, username)
             VALUES (?, ?, ?, ?)
         """, (user_id, first_name, last_name, username))
         await db.commit()

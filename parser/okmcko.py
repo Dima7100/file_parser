@@ -5,7 +5,7 @@ import requests
 import urllib3
 from dotenv import load_dotenv
 
-from configs.logging_config import logger_mcko
+from configs import logger_mcko
 
 # Заголовки
 HEADERS = {

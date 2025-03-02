@@ -1,7 +1,7 @@
 import json
 import os
 
-from configs.logging_config import logger_storage
+from configs import logger_storage
 
 
 def is_file_exists():

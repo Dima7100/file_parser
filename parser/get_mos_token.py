@@ -7,7 +7,7 @@ from selenium.common.exceptions import TimeoutException, WebDriverException, NoS
 from selenium_stealth import stealth
 from fake_useragent import UserAgent
 
-from configs.logging_config import logger_mos
+from configs import logger_mos
 
 chrome_options = Options()
 chrome_options.add_argument("--headless=new")
