@@ -1,25 +1,25 @@
 import json
 import os
 
-from logging_config import logger_storage
+from configs.logging_config import logger_storage
 
 
 def is_file_exists():
     """
     Проверяем наличие файла с метаданными о файлах
     """
-    if os.path.exists('data.json'):
+    if os.path.exists('../data/data.json'):
         return True
     else:
         logger_storage.warning('data.json не существует')
         return False
 
-def save_data(data):
+def save_data(_data):
     """
     Сохраняем в json
     """
-    with open('data.json', 'w', encoding='utf-8') as file:
-        json.dump(data, file, ensure_ascii=False, indent=5)
+    with open('../data/data.json', 'w', encoding='utf-8') as file:
+        json.dump(_data, file, ensure_ascii=False, indent=5)
         logger_storage.info('Новые данные сохранены в data.json')
 
 
@@ -27,7 +27,7 @@ def load_data():
     """
     Загружаем из data.json
     """
-    with open('data.json', 'r', encoding='utf-8') as file:
+    with open('../data/data.json', 'r', encoding='utf-8') as file:
         data = json.load(file)
     return data
 
@@ -42,14 +42,13 @@ def is_file_in_old_data(file_name, old_data):
     return False
 
 
-#TODO сделать проверку в main, чтобы функция вызывалась только если есть data!
-def filter_new_files(data):
+def filter_new_files(data: list):
     """
     Основной метод, который исключает из переданного списка словарей те,
-    что уже есть и возвращает только новые
+    что уже есть, сохраняет обновленный словарь и возвращает только новые.
     """
     new_data = list()
-    # Если файла ещё нет, то значит все переданные данные новые, сразу и сохраняем
+    # Если файла ещё нет, то значит все переданные данные новые, сразу и сохраняем и возвращаем как есть
     if not is_file_exists():
         save_data(data)
         return data
@@ -63,4 +62,9 @@ def filter_new_files(data):
             new_data.append(file_info)
     old_data.extend(new_data)
     save_data(old_data)
-    return new_data
+    if new_data:
+        return new_data
+    else:
+        logger_storage.info('Новый данных нет')
+        return False
+
