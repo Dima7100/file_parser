@@ -15,7 +15,7 @@ def setup_logger(name):
     # Создать директория логирования.filaname rename to main.log
     # Создание папок можно вывести в __init__
     file_handler = RotatingFileHandler(
-        filename="mcko.log",
+        filename="../data/logs/mcko.log",
         maxBytes= 10 * 1024 * 1024,
         backupCount= 3,
         encoding= 'utf-8'
