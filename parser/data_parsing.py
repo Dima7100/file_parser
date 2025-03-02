@@ -1,7 +1,6 @@
-import lxml
 from bs4 import BeautifulSoup
 
-from logging_config import logger_processing
+from configs.logging_config import logger_processing
 
 
 def get_data(response):
@@ -11,9 +10,14 @@ def get_data(response):
     soup = BeautifulSoup(response.content, 'lxml', from_encoding="windows-1251")
 
     table = soup.select_one('table[class=tbl]')
-    rows = table.find_all('tr')
+    try:
+        rows = table.find_all('tr')
+    except AttributeError:
+        logger_processing.error('Таблица в get_data не найдена!')
+        return False
     logger_processing.info('Находим таблицу с файлами')
     data = list()
+    # Исключаем заголовок таблицы
     for row in rows[1:]:
         cells = row.find_all('td')
         file_inf = dict()
@@ -38,6 +42,6 @@ def get_data(response):
 
 
 if __name__ == '__main__':
-    with open('okmcko.html', 'r', encoding='windows-1251') as file:
+    with open('../okmcko.html', 'r', encoding='windows-1251') as file:
         html_content = file.read()
     print(get_data(html_content))
