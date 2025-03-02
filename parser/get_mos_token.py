@@ -85,7 +85,7 @@ def get_token():
         return token['value']
     except (TimeoutException, WebDriverException, NoSuchCookieException, NoSuchElementException) as e:
         logger_mos.error(f'Ошибка при работе Selenium: {e}')
-        return None
+        return False
 
 
 

@@ -27,6 +27,8 @@ def get_data_to_bot():
     bearer_token = os.getenv('TOKEN')
     if is_token_expired(bearer_token):  # Если True, то получаем новый токен и заносим в env
         bearer_token = get_token()
+        if bearer_token is False:
+            return False
         set_key('../.env', 'TOKEN', bearer_token)
         logger_mcko.info('Новый токен получен и сохранен')
 
@@ -55,6 +57,6 @@ def get_data_to_bot():
 
     download_success = download_files(session, new_data)
     if download_success is False:
-        return None
+        return False
 
     return new_data
