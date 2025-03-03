@@ -111,6 +111,25 @@ def get_response(session):
         logger_mcko.error(f'Ошибка перехода на страницу файлов сайта МЦКО: {e}')
         return False, False
 
+def session_status(session: requests.Session):
+    try:
+        if session is None:
+            return False
+
+        response_mcko = session.get('https://okmcko.mos.ru/index2020.php?c=mid&d=downld')
+        response_mcko.raise_for_status()
+        if response_mcko.status_code == 302:
+            logger_mcko.info('Сессия протухла, статус 302')
+            return False
+        elif response_mcko.status_code == 200:
+            logger_mcko.info('Сессия жива, используем дальше')
+            return True
+    except requests.HTTPError as e:
+        logger_mcko.error(f'Ошибка проверки сессии. Статус: {e}')
+        return False
+
+
+
 
 if __name__ == '__main__':
     get_response()
