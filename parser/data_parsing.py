@@ -35,6 +35,7 @@ def get_data(response):
             file_inf['desc_regular'] = cells[3].find('br').next_sibling.strip()
         except AttributeError:
             file_inf['desc_regular'] = cells[3].text.strip()
+        file_inf['file_id'] = ''
         data.append(file_inf)
     logger_processing.info('Данные спарсены и сохранены словарем в переменной data')
     return data
