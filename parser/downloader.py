@@ -3,7 +3,7 @@ from pathlib import Path
 from configs import logger_downloader
 
 CURRENT_PATH = Path.cwd()
-DOWNLOADS = CURRENT_PATH / 'downloads'
+DOWNLOADS = CURRENT_PATH / 'data/downloads'
 
 def is_exists_directory():
     """
@@ -21,7 +21,7 @@ def download_files(session: requests.Session, new_data: list):
     Скачиваем файлы при наличии списка
     """
     if not is_exists_directory():
-        Path.mkdir(DOWNLOADS)
+        DOWNLOADS.parent.mkdir(parents=True, exist_ok=True)
         logger_downloader.info('Создали папку')
 
     for file_info in new_data:
