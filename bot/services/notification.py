@@ -35,7 +35,7 @@ async def check_and_send_data(bot: Bot):
                     if file['file_id']:
                         document = file['file_id']
                     else:
-                        document = FSInputFile(f'downloads/{file["name"]}')
+                        document = FSInputFile(f'../data/downloads/{file["name"]}')
                     try:
                         sent_document = await bot.send_document(user_id, document=document, caption=text, parse_mode='HTML')
                     except TelegramRetryAfter as e:
