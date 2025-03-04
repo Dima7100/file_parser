@@ -4,10 +4,10 @@ from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
 # Путь к лог-файлу
-log_file_path = Path("../data/logs/mcko.log")
+log_file_path = Path("../data/logs")
 
 # Создаем директории, если они отсутствуют
-log_file_path.parent.mkdir(parents=True, exist_ok=True)
+log_file_path.mkdir(parents=True, exist_ok=True)
 
 
 def setup_logger(name):
@@ -23,7 +23,7 @@ def setup_logger(name):
     # Создать директория логирования.filaname rename to main.log
     # Создание папок можно вывести в __init__
     file_handler = RotatingFileHandler(
-        filename=log_file_path,
+        filename=log_file_path / 'mcko.log',
         maxBytes= 10 * 1024 * 1024,
         backupCount= 3,
         encoding= 'utf-8'
