@@ -2,8 +2,9 @@ import requests
 from pathlib import Path
 from configs import logger_downloader
 
-CURRENT_PATH = Path.cwd()
-DOWNLOADS = CURRENT_PATH / 'data/downloads'
+#TODO надо понять, как работает path.cwd(), если запускается бот из bot/main.py
+
+DOWNLOADS = Path('../data/downloads')
 
 def is_exists_directory():
     """
