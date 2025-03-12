@@ -6,8 +6,14 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, WebDriverException, NoSuchCookieException, NoSuchElementException
 from selenium_stealth import stealth
 from fake_useragent import UserAgent
+from dotenv import load_dotenv
+import os
 
 from configs import logger_mos
+
+load_dotenv()
+MOS_LOGIN = os.getenv('MOS_LOGIN')
+MOS_PASSWORD = os.getenv('MOS_PASSWORD')
 
 chrome_options = Options()
 chrome_options.add_argument("--headless=new")
@@ -72,8 +78,8 @@ def get_token():
 
         logger_mos.info('login.mos.ru открыт')
 
-        driver.find_element(By.ID, 'login').send_keys('pronindv')
-        driver.find_element(By.ID, 'password').send_keys('Cuibai1!')
+        driver.find_element(By.ID, 'login').send_keys(MOS_LOGIN)
+        driver.find_element(By.ID, 'password').send_keys(MOS_PASSWORD)
         driver.find_element(By.ID, 'bind').click()
 
         logger_mos.info('Выполняем вход')
