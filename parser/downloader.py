@@ -40,6 +40,7 @@ def download_files(session: requests.Session, new_data: list):
             logger_downloader.error(f'Сайт не ответил или файл не скачался {e}')
             #TODO - уведомить админа, удалить new_data из json
             return False
+    print('файлы скачены')
     logger_downloader.info('Файлы скачены!')
     return True
 
