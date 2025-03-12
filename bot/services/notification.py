@@ -24,8 +24,11 @@ async def check_and_send_data(bot: Bot):
         if session_status(session) is False:
             session = get_mcko_session()
         files_info = get_data_to_bot(session)
-        users_id = await get_users_id()
+        print('Дошли до получения айди юзеров')
+        users_id = await get_users_id('МЦКО')
+        print(f'Получили айди юзеров {users_id}')
         if files_info:
+            print('Файлы имеются, отсылаем')
             for user_id in users_id:
                 for file in files_info:
                     text = (f"Файл <b>{file['name']}</b>\n"
@@ -45,7 +48,6 @@ async def check_and_send_data(bot: Bot):
                     if not file['file_id']:
                         file['file_id'] = sent_document.document.file_id
                     counter+=1
-                    #TODO подумать над отправкой file_id
                     if counter == 25:
                         await asyncio.sleep(1)
                         counter = 0
