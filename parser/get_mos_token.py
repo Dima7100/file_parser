@@ -31,39 +31,40 @@ chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
 user_agent = UserAgent(browsers='chrome', os='windows', platforms='pc')
 try:
     driver = webdriver.Chrome(options=chrome_options)
+
+    # библиотека, которой передается драйвер и он там что-то мутит для обмана детекторов бота
+    stealth(driver=driver,
+                user_agent=user_agent.random,
+                languages=["ru-RU", "ru"],
+                vendor="Google Inc.",
+                platform="Win32",
+                webgl_vendor="Intel Inc.",
+                renderer="Intel Iris OpenGL Engine",
+                fix_hairline=True,
+                run_on_insecure_origins=True
+                )
+
+    # Что-то редактируют в коде драйвера, на что обращают внимание детекторы ботов
+    driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+            'source': '''
+                delete window.cdc_adoQpoasnfa76pfcZLmcfl_Array;
+                delete window.cdc_adoQpoasnfa76pfcZLmcfl_Promise;
+                delete window.cdc_adoQpoasnfa76pfcZLmcfl_Symbol;
+          '''
+        })
+
+    driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+        "source": """
+            Object.defineProperty(navigator, 'webdriver', {
+                get: () => undefined
+            });
+        """
+    })
 except WebDriverException as e:
     print(f"Произошла ошибка WebDriver: {e}")
 except Exception as e:
     print(f"Произошла общая ошибка: {e}")
 
-# библиотека, которой передается драйвер и он там что-то мутит для обмана детекторов бота
-stealth(driver=driver,
-            user_agent=user_agent.random,
-            languages=["ru-RU", "ru"],
-            vendor="Google Inc.",
-            platform="Win32",
-            webgl_vendor="Intel Inc.",
-            renderer="Intel Iris OpenGL Engine",
-            fix_hairline=True,
-            run_on_insecure_origins=True
-            )
-
-# Что-то редактируют в коде драйвера, на что обращают внимание детекторы ботов
-driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
-        'source': '''
-            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Array;
-            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Promise;
-            delete window.cdc_adoQpoasnfa76pfcZLmcfl_Symbol;
-      '''
-    })
-
-driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
-    "source": """
-        Object.defineProperty(navigator, 'webdriver', {
-            get: () => undefined
-        });
-    """
-})
 
 driver.implicitly_wait(10) # явное ожидание ответа от сервера в 10 секунд для всех команд драйвера
 
