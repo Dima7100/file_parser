@@ -118,7 +118,7 @@ async def add_subscribe(name: str):
     :param name:
     :return:
     """
-    async with aiosqlite.connect('../data/bot.db') as db:
+    async with aiosqlite.connect(DB_PATH) as db:
         await db.execute("""
             INSERT OR IGNORE INTO subscribes (name) VALUES (?) 
             """, (name,))
@@ -129,7 +129,7 @@ async def get_subscribes() -> list:
     Берет список подписок. (для инлайн клавиатуры пользователю)
     :return:
     """
-    async with aiosqlite.connect('../data/bot.db') as db:
+    async with aiosqlite.connect(DB_PATH) as db:
         async with db.execute("SELECT name FROM subscribes") as cursor:
             subscribes = await cursor.fetchall()
             return [subscribe[0] for subscribe in subscribes]
@@ -140,7 +140,7 @@ async def get_user_subscribes(user_id) -> list:
     :param user_id:
     :return:
     """
-    async with aiosqlite.connect('../data/bot.db') as db:
+    async with aiosqlite.connect(DB_PATH) as db:
         async with db.execute("""
         SELECT subscribes.name 
         FROM subscribes INNER JOIN subscribes_users ON subscribes.id = subscribes_users.subscribe_id
@@ -157,7 +157,7 @@ async def add_user_subscribe(user_id: int, subscribe: str):
     :param subscribe:
     :return:
     """
-    async with aiosqlite.connect('../data/bot.db') as db:
+    async with aiosqlite.connect(DB_PATH) as db:
         subscribe_id = await db.execute("""
         SELECT id FROM subscribes WHERE name = ?""", (subscribe,))
         print(f'subscribe_id in db: {subscribe_id}')
@@ -175,7 +175,7 @@ async def delete_user_subscribe(user_id: int, subscribe: str):
     :param subscribe:
     :return:
     """
-    async with aiosqlite.connect('../data/bot.db') as db:
+    async with aiosqlite.connect(DB_PATH) as db:
         subscribe_id = await db.execute("""
                      SELECT id FROM subscribes WHERE name = ?""", (subscribe,))
         sub_id = await subscribe_id.fetchone()
@@ -185,13 +185,13 @@ async def delete_user_subscribe(user_id: int, subscribe: str):
         await db.commit()
 
 async def check_user_status(user_id: int):
-    async with aiosqlite.connect('../data/bot.db') as db:
+    async with aiosqlite.connect(DB_PATH) as db:
         async with db.execute("SELECT status FROM users WHERE user_id = ?", (user_id,)) as cursor:
             status = await cursor.fetchone()
             return status[0]
 
 async def delete_user(user_id: int):
-    async with aiosqlite.connect('../data/bot.db') as db:
+    async with aiosqlite.connect(DB_PATH) as db:
         await db.execute("PRAGMA foreign_keys = ON;")
         await db.commit()
         await db.execute("DELETE FROM users WHERE user_id = ?", (user_id,))

@@ -22,7 +22,7 @@ def download_files(session: requests.Session, new_data: list):
     Скачиваем файлы при наличии списка
     """
     if not is_exists_directory():
-        DOWNLOADS.parent.mkdir(parents=True, exist_ok=True)
+        DOWNLOADS.mkdir(parents=True, exist_ok=True)
         logger_downloader.info('Создали папку')
 
     for file_info in new_data:
