@@ -3,7 +3,8 @@ import functools
 from pathlib import Path
 PROJECT_ROOT = Path(__file__).parent.parent
 DB_PATH = PROJECT_ROOT / 'data' / 'bot.db'
-DB_PATH.mkdir(parents=True, exist_ok=True)
+DB_DIR = PROJECT_ROOT / 'data'
+DB_DIR.mkdir(parents=True, exist_ok=True)
 
 async def init_db():
     """

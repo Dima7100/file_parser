@@ -6,7 +6,8 @@ from configs import logger_storage
 
 PROJECT_ROOT = Path(__file__).parent.parent
 JSON_PATH = PROJECT_ROOT / 'data' / 'data.json'
-JSON_PATH.mkdir(parents=True, exist_ok=True)
+JSON_DIR = PROJECT_ROOT / 'data'
+JSON_DIR.mkdir(parents=True, exist_ok=True)
 
 def is_file_exists():
     """
