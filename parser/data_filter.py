@@ -1,14 +1,16 @@
 import json
 import os
-
+from pathlib import Path
 from configs import logger_storage
 
+
+PROJECT_ROOT = Path(__file__).parent.parent
 
 def is_file_exists():
     """
     Проверяем наличие файла с метаданными о файлах
     """
-    if os.path.exists('../data/data.json'):
+    if os.path.exists(PROJECT_ROOT / 'data' / 'data.json'):
         return True
     else:
         logger_storage.warning('data.json не существует')
@@ -18,7 +20,7 @@ def save_data(_data):
     """
     Сохраняем в json
     """
-    with open('../data/data.json', 'w', encoding='utf-8') as file:
+    with open(PROJECT_ROOT / 'data' / 'data.json', 'w', encoding='utf-8') as file:
         json.dump(_data, file, ensure_ascii=False, indent=5)
         logger_storage.info('Новые данные сохранены в data.json')
 
@@ -27,7 +29,7 @@ def load_data():
     """
     Загружаем из data.json
     """
-    with open('../data/data.json', 'r', encoding='utf-8') as file:
+    with open(PROJECT_ROOT / 'data' / 'data.json', 'r', encoding='utf-8') as file:
         data = json.load(file)
     return data
 
