@@ -13,7 +13,7 @@ async def approve_user(callback: types.CallbackQuery):
 
     if user:
         await callback.message.edit_text(f"Пользователь {user[2]} {user[3]} @{user[4]} был одобрен.")
-        await callback.bot.send_message(user_id, "Запрос одобрен")
+        await callback.bot.send_message(user_id, "Запрос одобрен. Команда /subscribes позволит подписаться на обновления")
     else:
         await callback.message.edit_text(f"Пользователь не найден")
 
