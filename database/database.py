@@ -2,7 +2,7 @@ import aiosqlite
 import functools
 from pathlib import Path
 PROJECT_ROOT = Path(__file__).parent.parent
-DB_PATH = DB_PATH
+DB_PATH = PROJECT_ROOT / 'data' / 'bot.db'
 
 async def init_db():
     """
