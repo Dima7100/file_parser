@@ -2,6 +2,7 @@ import aiosqlite
 import functools
 from pathlib import Path
 PROJECT_ROOT = Path(__file__).parent.parent
+DB_PATH = DB_PATH
 
 async def init_db():
     """
@@ -13,7 +14,7 @@ async def init_db():
     И таблица subscribes_users объединяет id подписки с user_id из users (не id записи в таблице users!)
     :return:
     """
-    async with aiosqlite.connect(PROJECT_ROOT / 'data' / 'bot.db') as db:
+    async with aiosqlite.connect(DB_PATH) as db:
         await db.execute("PRAGMA foreign_keys = ON;")
         await db.commit()
         await db.execute("""
@@ -54,7 +55,7 @@ async def add_user(user_id: int, first_name: str, last_name: str, username: str,
     :param username:
     :return:
     """
-    async with aiosqlite.connect(PROJECT_ROOT / 'data' / 'bot.db') as db:
+    async with aiosqlite.connect(DB_PATH) as db:
         await db.execute("""
             INSERT OR IGNORE INTO users (user_id, first_name, last_name, username, status)
             VALUES (?, ?, ?, ?, ?)
@@ -68,7 +69,7 @@ async def update_user_status(user_id: int, status: str):
     :param status:
     :return:
     """
-    async with aiosqlite.connect(PROJECT_ROOT / 'data' / 'bot.db') as db:
+    async with aiosqlite.connect(DB_PATH) as db:
         await db.execute("""
             UPDATE users SET status = ? WHERE user_id = ?
         """, (status, user_id))
@@ -80,7 +81,7 @@ async def get_user(user_id: int):
     :param user_id:
     :return:
     """
-    async with aiosqlite.connect(PROJECT_ROOT / 'data' / 'bot.db') as db:
+    async with aiosqlite.connect(DB_PATH) as db:
         async with db.execute("SELECT * FROM users WHERE user_id = ?", (user_id,)) as cursor:
             return await cursor.fetchone()
 
@@ -89,7 +90,7 @@ async def get_users_id(subscribe):
     Берет только user_id всех пользователей БД (для рассылки)
     :return:
     """
-    async with aiosqlite.connect(PROJECT_ROOT / 'data' / 'bot.db') as db:
+    async with aiosqlite.connect(DB_PATH) as db:
         async with db.execute("""
         SELECT users.user_id
         FROM users INNER JOIN subscribes_users ON users.user_id = subscribes_users.user_id
@@ -103,7 +104,7 @@ async def get_users() -> tuple:
     Берет всю информацию по всем юзерам из БД (для админа)
     :return:
     """
-    async with aiosqlite.connect(PROJECT_ROOT / 'data' / 'bot.db') as db:
+    async with aiosqlite.connect(DB_PATH) as db:
         async with db.execute("SELECT user_id, first_name, last_name, username, status FROM users") as cursor:
             users = await cursor.fetchall()
             return users
