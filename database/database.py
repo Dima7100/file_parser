@@ -3,6 +3,7 @@ import functools
 from pathlib import Path
 PROJECT_ROOT = Path(__file__).parent.parent
 DB_PATH = PROJECT_ROOT / 'data' / 'bot.db'
+print(DB_PATH)
 DB_DIR = PROJECT_ROOT / 'data'
 DB_DIR.mkdir(parents=True, exist_ok=True)
 
